@@ -1,21 +1,12 @@
-/* =====================================================
-   SUPABASE CONNECTION
-===================================================== */
-
 const SUPABASE_URL = "https://hdizscggbjqpuhivhqta.supabase.co";
 
-const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_dNIC3-xihIq87cH18rqEvQ_P8khT80E";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dNIC3-xihIq87cH18rqEvQ_P8khT80E";
 
-const supabase = window.supabase.createClient(
+const db = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
 );
 
-
-/* =====================================================
-   MAIN APP
-===================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -23,17 +14,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("modal");
     const closeModal = document.getElementById("closeModal");
     const taskForm = document.getElementById("taskForm");
-    const searchInput = document.getElementById("searchInput");
 
     const taskNameInput = document.getElementById("taskName");
     const taskSectionInput = document.getElementById("taskSection");
     const taskPriorityInput = document.getElementById("taskPriority");
     const taskTeamInput = document.getElementById("taskTeam");
 
+    const searchInput = document.getElementById("searchInput");
 
-    /* =====================================================
+
+    /* =========================
        OPEN MODAL
-    ===================================================== */
+    ========================= */
 
     newTaskBtn.addEventListener("click", () => {
 
@@ -44,9 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /* =====================================================
+    /* =========================
        CLOSE MODAL
-    ===================================================== */
+    ========================= */
 
     closeModal.addEventListener("click", () => {
 
@@ -66,16 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /* =====================================================
-       LOAD TASKS FROM SUPABASE
-    ===================================================== */
+    /* =========================
+       LOAD TASKS
+    ========================= */
 
     async function loadTasks() {
 
-        console.log("Loading tasks from Supabase...");
-
-
-        const { data, error } = await supabase
+        const { data, error } = await db
             .from("tasks")
             .select("*")
             .order("created_at", {
@@ -85,10 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (error) {
 
-            console.error("SUPABASE LOAD ERROR:", error);
+            console.error("LOAD ERROR:", error);
 
             alert(
-                "Error loading tasks:\n\n" +
+                "Could not load tasks:\n\n" +
                 error.message
             );
 
@@ -97,23 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        console.log("Tasks loaded:", data);
-
-
-        /*
-         * Clear existing tasks
-         */
-
         document.querySelectorAll(".tasks").forEach((container) => {
 
             container.innerHTML = "";
 
         });
 
-
-        /*
-         * Display tasks
-         */
 
         data.forEach((task) => {
 
@@ -129,18 +107,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =====================================================
-       RENDER TASK
-    ===================================================== */
+    /* =========================
+       DISPLAY TASK
+    ========================= */
 
     function renderTask(task) {
 
-        const sectionContainer = document.querySelector(
+        const container = document.querySelector(
             `.tasks[data-section="${task.section}"]`
         );
 
 
-        if (!sectionContainer) {
+        if (!container) {
 
             console.error(
                 "Section not found:",
@@ -152,20 +130,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        const taskRow = document.createElement("div");
+        const row = document.createElement("div");
 
-        taskRow.className = "task-row";
+        row.className = "task-row";
 
-        taskRow.dataset.task = task.name;
+        row.dataset.id = task.id;
 
-        taskRow.dataset.id = task.id;
+        row.dataset.task = task.name;
 
-
-        /*
-         * Priority
-         */
 
         let priorityText = "Medium";
+
 
         if (task.priority === "high") {
 
@@ -180,18 +155,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /*
-         * Completed
-         */
-
         if (task.completed) {
 
-            taskRow.classList.add("completed");
+            row.classList.add("completed");
 
         }
 
 
-        taskRow.innerHTML = `
+        row.innerHTML = `
 
             <div class="task-name">
 
@@ -234,8 +205,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             <button
+                type="button"
                 class="delete-task"
-                title="Delete task"
             >
                 ×
             </button>
@@ -243,47 +214,29 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
 
-        sectionContainer.appendChild(taskRow);
+        container.appendChild(row);
 
     }
 
 
-    /* =====================================================
-       ADD NEW TASK
-    ===================================================== */
+    /* =========================
+       ADD TASK
+    ========================= */
 
     taskForm.addEventListener("submit", async (event) => {
 
         event.preventDefault();
 
 
-        const name =
-            taskNameInput.value.trim();
+        const name = taskNameInput.value.trim();
 
+        const section = taskSectionInput.value;
 
-        const section =
-            taskSectionInput.value;
-
-
-        const priority =
-            taskPriorityInput.value;
-
+        const priority = taskPriorityInput.value;
 
         const team =
             taskTeamInput.value.trim() || "General";
 
-
-        console.log("Adding task:", {
-            name,
-            section,
-            priority,
-            team
-        });
-
-
-        /*
-         * Make sure task name isn't empty
-         */
 
         if (!name) {
 
@@ -294,65 +247,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        /*
-         * Make sure section exists
-         */
-
-        const sectionContainer = document.querySelector(
-            `.tasks[data-section="${section}"]`
-        );
-
-
-        if (!sectionContainer) {
-
-            alert(
-                "The selected task section does not exist."
-            );
-
-            return;
-
-        }
-
-
-        /*
-         * Due date
-         */
-
-        let dueDate = section;
-
-
-        if (section === "Today") {
-
-            dueDate = "Today";
-
-        }
-
-
-        if (section === "Tomorrow") {
-
-            dueDate = "Tomorrow";
-
-        }
-
-
-        if (section === "This week") {
-
-            dueDate = "This week";
-
-        }
-
-
-        /*
-         * SEND TASK TO SUPABASE
-         */
-
-        const { data, error } = await supabase
+        const { data, error } = await db
             .from("tasks")
             .insert([
                 {
                     name: name,
                     section: section,
-                    due_date: dueDate,
+                    due_date: section,
                     priority: priority,
                     team: team,
                     completed: false
@@ -362,16 +263,9 @@ document.addEventListener("DOMContentLoaded", () => {
             .single();
 
 
-        /*
-         * Check for database error
-         */
-
         if (error) {
 
-            console.error(
-                "SUPABASE INSERT ERROR:",
-                error
-            );
+            console.error("INSERT ERROR:", error);
 
             alert(
                 "Could not add task:\n\n" +
@@ -383,36 +277,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        console.log(
-            "Task successfully added:",
-            data
-        );
-
-
-        /*
-         * Display the new task
-         */
-
         renderTask(data);
 
 
-        /*
-         * Reset form
-         */
-
         taskForm.reset();
-
-
-        /*
-         * Close modal
-         */
 
         modal.classList.remove("show");
 
-
-        /*
-         * Activate buttons
-         */
 
         setupCheckboxes();
 
@@ -421,93 +292,44 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /* =====================================================
+    /* =========================
        CHECKBOXES
-    ===================================================== */
+    ========================= */
 
     function setupCheckboxes() {
 
-        const checkboxes =
-            document.querySelectorAll(".task-checkbox");
+        document
+            .querySelectorAll(".task-checkbox")
+            .forEach((checkbox) => {
 
 
-        checkboxes.forEach((checkbox) => {
+                if (checkbox.dataset.listener) {
 
-            /*
-             * Prevent duplicate listeners
-             */
+                    return;
 
-            if (checkbox.dataset.listener === "true") {
-
-                return;
-
-            }
+                }
 
 
-            checkbox.dataset.listener = "true";
+                checkbox.dataset.listener = "true";
 
 
-            checkbox.addEventListener(
-                "change",
-                async () => {
+                checkbox.addEventListener(
+                    "change",
+                    async () => {
 
-                    const row =
-                        checkbox.closest(".task-row");
-
-
-                    const taskId =
-                        row.dataset.id;
+                        const row =
+                            checkbox.closest(".task-row");
 
 
-                    const completed =
-                        checkbox.checked;
+                        const id =
+                            row.dataset.id;
 
 
-                    /*
-                     * Update appearance
-                     */
-
-                    if (completed) {
-
-                        row.classList.add("completed");
-
-                    } else {
-
-                        row.classList.remove("completed");
-
-                    }
+                        const completed =
+                            checkbox.checked;
 
 
-                    /*
-                     * Update Supabase
-                     */
-
-                    const { error } =
-                        await supabase
-                            .from("tasks")
-                            .update({
-                                completed: completed
-                            })
-                            .eq("id", taskId);
-
-
-                    if (error) {
-
-                        console.error(
-                            "SUPABASE UPDATE ERROR:",
-                            error
-                        );
-
-
-                        /*
-                         * Revert UI
-                         */
-
-                        checkbox.checked =
-                            !completed;
-
-
-                        if (checkbox.checked) {
+                        if (completed) {
 
                             row.classList.add(
                                 "completed"
@@ -522,174 +344,151 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
 
 
-                        alert(
-                            "Could not update task:\n\n" +
-                            error.message
-                        );
+                        const { error } = await db
+                            .from("tasks")
+                            .update({
+                                completed: completed
+                            })
+                            .eq("id", id);
+
+
+                        if (error) {
+
+                            console.error(
+                                "UPDATE ERROR:",
+                                error
+                            );
+
+                            alert(
+                                "Could not update task:\n\n" +
+                                error.message
+                            );
+
+                        }
 
                     }
+                );
 
-                }
-            );
-
-        });
+            });
 
     }
 
 
-    /* =====================================================
-       DELETE TASKS
-    ===================================================== */
+    /* =========================
+       DELETE TASK
+    ========================= */
 
     function setupDeleteButtons() {
 
-        const deleteButtons =
-            document.querySelectorAll(".delete-task");
+        document
+            .querySelectorAll(".delete-task")
+            .forEach((button) => {
 
 
-        deleteButtons.forEach((button) => {
+                if (button.dataset.listener) {
 
-            /*
-             * Prevent duplicate listeners
-             */
-
-            if (button.dataset.listener === "true") {
-
-                return;
-
-            }
-
-
-            button.dataset.listener = "true";
-
-
-            button.addEventListener(
-                "click",
-                async () => {
-
-                    const row =
-                        button.closest(".task-row");
-
-
-                    const taskId =
-                        row.dataset.id;
-
-
-                    const confirmed =
-                        confirm(
-                            "Are you sure you want to delete this task?"
-                        );
-
-
-                    if (!confirmed) {
-
-                        return;
-
-                    }
-
-
-                    /*
-                     * Delete from Supabase
-                     */
-
-                    const { error } =
-                        await supabase
-                            .from("tasks")
-                            .delete()
-                            .eq("id", taskId);
-
-
-                    if (error) {
-
-                        console.error(
-                            "SUPABASE DELETE ERROR:",
-                            error
-                        );
-
-                        alert(
-                            "Could not delete task:\n\n" +
-                            error.message
-                        );
-
-                        return;
-
-                    }
-
-
-                    /*
-                     * Remove from website
-                     */
-
-                    row.remove();
+                    return;
 
                 }
-            );
 
-        });
+
+                button.dataset.listener = "true";
+
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        const row =
+                            button.closest(".task-row");
+
+
+                        const id =
+                            row.dataset.id;
+
+
+                        const { error } = await db
+                            .from("tasks")
+                            .delete()
+                            .eq("id", id);
+
+
+                        if (error) {
+
+                            console.error(
+                                "DELETE ERROR:",
+                                error
+                            );
+
+                            alert(
+                                "Could not delete task:\n\n" +
+                                error.message
+                            );
+
+                            return;
+
+                        }
+
+
+                        row.remove();
+
+                    }
+                );
+
+            });
 
     }
 
 
-    /* =====================================================
+    /* =========================
        SEARCH
-    ===================================================== */
+    ========================= */
 
     searchInput.addEventListener("input", () => {
 
-        const searchTerm =
+        const search =
             searchInput.value
                 .toLowerCase()
                 .trim();
 
 
-        const taskRows =
-            document.querySelectorAll(".task-row");
+        document
+            .querySelectorAll(".task-row")
+            .forEach((row) => {
+
+                const text =
+                    row.innerText.toLowerCase();
 
 
-        taskRows.forEach((row) => {
+                row.style.display =
+                    text.includes(search)
+                        ? "grid"
+                        : "none";
 
-            const taskText =
-                row.innerText.toLowerCase();
-
-
-            if (
-                taskText.includes(searchTerm)
-            ) {
-
-                row.style.display = "grid";
-
-            } else {
-
-                row.style.display = "none";
-
-            }
-
-        });
+            });
 
     });
 
 
-    /* =====================================================
-       HTML SECURITY
-    ===================================================== */
+    /* =========================
+       ESCAPE HTML
+    ========================= */
 
     function escapeHTML(text) {
 
         const div =
             document.createElement("div");
 
-
         div.textContent = text;
-
 
         return div.innerHTML;
 
     }
 
 
-    /* =====================================================
-       INITIALIZE
-    ===================================================== */
+    /* =========================
+       START
+    ========================= */
 
     loadTasks();
 
