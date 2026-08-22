@@ -1,148 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizo - My Tasks</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Task List</title>
+
 
     <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
 
     <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
+
 
 <body>
 
+
     <div class="app">
 
-        <!-- SIDEBAR -->
+
+        <!-- =========================
+             SIDEBAR
+        ========================== -->
+
         <aside class="sidebar">
 
             <div class="logo">
-                
+
                 <span>My Task List</span>
+
             </div>
 
-            <nav class="main-nav">
-                
 
-                <a href="#" class="nav-item active">
-                    <span class="nav-icon">✓</span>
+            <nav class="main-nav">
+
+                <a
+                    href="#"
+                    class="nav-item active"
+                >
+
+                    <span class="nav-icon">
+                        ✓
+                    </span>
+
                     My tasks
+
                 </a>
 
-                
             </nav>
-
-            
 
         </aside>
 
 
-        <!-- MAIN CONTENT -->
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+
         <main class="main">
 
+
             <!-- TOP BAR -->
+
             <header class="topbar">
 
+
                 <div class="search-container">
-                    <span class="search-icon">⌕</span>
+
+                    <span class="search-icon">
+                        ⌕
+                    </span>
+
+
                     <input
                         type="text"
                         id="searchInput"
                         placeholder="Search"
                     >
+
                 </div>
+
+
 
                 <div class="top-actions">
-                    <button class="new-task-btn" id="newTaskBtn">
-                        <span>+</span>
+
+
+                    <button
+                        type="button"
+                        class="new-task-btn"
+                        id="newTaskBtn"
+                    >
+
+                        <span>
+                            +
+                        </span>
+
                         New task
+
                     </button>
 
+
                 </div>
+
 
             </header>
 
 
-            <!-- TASK CONTENT -->
-            <section class="task-area" id="taskArea">
+
+            <!-- =========================
+                 TASK CONTENT
+            ========================== -->
+
+            <section
+                class="task-area"
+                id="taskArea"
+            >
+
 
                 <!-- TODAY -->
+
                 <div class="task-section">
+
+
                     <div class="section-header">
-                        <h2>Today</h2>
+
+                        <h2>
+                            Today
+                        </h2>
+
 
                         <div class="column-labels">
-                            <span>Due date</span>
-                            <span>Stage</span>
-                            <span>Priority</span>
-                            <span>Team</span>
-                            <span>Assignee</span>
+
+                            <span>
+                                Due date
+                            </span>
+
+                            <span>
+                                Stage
+                            </span>
+
+                            <span>
+                                Priority
+                            </span>
+
+                            <span>
+                                Team
+                            </span>
+
+                            <span>
+                                Assignee
+                            </span>
+
                         </div>
+
                     </div>
 
-                    
+
+                    <!-- IMPORTANT -->
+
+                    <div
+                        class="tasks"
+                        data-section="Today"
+                    ></div>
+
+
                 </div>
+
 
 
                 <!-- TOMORROW -->
+
                 <div class="task-section">
+
+
                     <div class="section-header">
-                        <h2>Tomorrow</h2>
+
+                        <h2>
+                            Tomorrow
+                        </h2>
+
 
                         <div class="column-labels">
-                            <span>Due date</span>
-                            <span>Stage</span>
-                            <span>Priority</span>
-                            <span>Team</span>
-                            <span>Assignee</span>
+
+                            <span>
+                                Due date
+                            </span>
+
+                            <span>
+                                Stage
+                            </span>
+
+                            <span>
+                                Priority
+                            </span>
+
+                            <span>
+                                Team
+                            </span>
+
+                            <span>
+                                Assignee
+                            </span>
+
                         </div>
+
                     </div>
 
-                    
+
+                    <!-- IMPORTANT -->
+
+                    <div
+                        class="tasks"
+                        data-section="Tomorrow"
+                    ></div>
+
+
                 </div>
+
 
 
                 <!-- THIS WEEK -->
+
                 <div class="task-section">
+
+
                     <div class="section-header">
-                        <h2>This week</h2>
+
+                        <h2>
+                            This week
+                        </h2>
+
 
                         <div class="column-labels">
-                            <span>Due date</span>
-                            <span>Stage</span>
-                            <span>Priority</span>
-                            <span>Team</span>
-                            <span>Assignee</span>
+
+                            <span>
+                                Due date
+                            </span>
+
+                            <span>
+                                Stage
+                            </span>
+
+                            <span>
+                                Priority
+                            </span>
+
+                            <span>
+                                Team
+                            </span>
+
+                            <span>
+                                Assignee
+                            </span>
+
                         </div>
+
                     </div>
 
-                    
+
+                    <!-- IMPORTANT -->
+
+                    <div
+                        class="tasks"
+                        data-section="This week"
+                    ></div>
+
+
                 </div>
+
 
             </section>
 
+
         </main>
+
 
     </div>
 
 
-    <!-- NEW TASK MODAL -->
-    <div class="modal-overlay" id="modal">
+
+    <!-- =========================
+         NEW TASK MODAL
+    ========================== -->
+
+
+    <div
+        class="modal-overlay"
+        id="modal"
+    >
+
 
         <div class="modal">
 
-            <button class="close-modal" id="closeModal">×</button>
 
-            <h2>Add New Task</h2>
+            <button
+                type="button"
+                class="close-modal"
+                id="closeModal"
+            >
+                ×
+            </button>
+
+
+            <h2>
+                Add New Task
+            </h2>
+
+
 
             <form id="taskForm">
 
-                <label for="taskName">Task name</label>
+
+                <!-- TASK NAME -->
+
+                <label for="taskName">
+                    Task name
+                </label>
+
+
                 <input
                     type="text"
                     id="taskName"
@@ -150,44 +354,114 @@
                     required
                 >
 
-                <label for="taskSection">Due</label>
-                <select id="taskSection">
-                    <option value="Today">Today</option>
-                    <option value="Tomorrow">Tomorrow</option>
-                    <option value="This week">This week</option>
+
+
+                <!-- DUE DATE -->
+
+                <label for="taskSection">
+                    Due
+                </label>
+
+
+                <select
+                    id="taskSection"
+                    required
+                >
+
+                    <option value="Today">
+                        Today
+                    </option>
+
+                    <option value="Tomorrow">
+                        Tomorrow
+                    </option>
+
+                    <option value="This week">
+                        This week
+                    </option>
+
                 </select>
 
-                <label for="taskPriority">Priority</label>
-                <select id="taskPriority">
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
-                    <option value="low">Low</option>
+
+
+                <!-- PRIORITY -->
+
+                <label for="taskPriority">
+                    Priority
+                </label>
+
+
+                <select
+                    id="taskPriority"
+                    required
+                >
+
+                    <option value="high">
+                        High
+                    </option>
+
+                    <option value="medium">
+                        Medium
+                    </option>
+
+                    <option value="low">
+                        Low
+                    </option>
+
                 </select>
 
-                <label for="taskTeam">Team</label>
+
+
+                <!-- TEAM -->
+
+                <label for="taskTeam">
+                    Team
+                </label>
+
+
                 <input
                     type="text"
                     id="taskTeam"
                     placeholder="e.g. Marketing"
                 >
 
-                <button type="submit" class="add-task-submit">
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="add-task-submit"
+                >
                     Add task
                 </button>
 
+
             </form>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- JAVASCRIPT -->
-    <!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- Your JavaScript -->
-<script src="script.js"></script>
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+
+    <!-- Supabase -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- Your JavaScript -->
+
+    <script src="script.js"></script>
+
 
 </body>
+
 </html>
